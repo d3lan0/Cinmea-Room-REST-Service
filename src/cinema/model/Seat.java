@@ -1,11 +1,13 @@
 package cinema.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = "seatPurchased")
 public class Seat {
     int row;
     int column;
-
     int price;
-
     boolean purchased;
 
     public Seat(int row, int column) {
@@ -47,3 +49,6 @@ public class Seat {
         this.purchased = true;
     }
 }
+
+
+

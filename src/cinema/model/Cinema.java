@@ -21,7 +21,6 @@ public class Cinema {
         this.columns = columns;
         this.seats = getSeats();
     }
-
     public List<Seat> getSeats() {
         List<Seat> output = new ArrayList<>();
         Stream.of(seatMap).forEach(e -> {

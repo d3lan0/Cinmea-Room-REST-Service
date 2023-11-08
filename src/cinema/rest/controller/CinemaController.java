@@ -20,7 +20,10 @@ public class CinemaController {
     }
 
     @PostMapping("/purchase")
-    public Seat purchaseSeat(@RequestParam int row, @RequestParam int column) throws SeatSelectionException {
+    public Seat purchaseSeat(@RequestBody Map<String, String> payload) throws SeatSelectionException {
+        int row = Integer.parseInt(payload.get("row"));
+        int column = Integer.parseInt(payload.get("column"));
+        System.out.println(row + " " + column);
         if (!areRowAndColValid(row, column)) {
             throw new SeatSelectionException("The number of a row or a column is out of bounds!");
 
