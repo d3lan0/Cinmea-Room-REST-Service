@@ -2,8 +2,6 @@ package cinema;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class Main {
@@ -11,13 +9,4 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @RestController
-    public class CinemaController {
-        private final Cinema seats = new Cinema(9,9);
-
-        @GetMapping("/seats")
-        public Cinema getSeats(){
-            return seats;
-        }
-    }
 }
