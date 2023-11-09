@@ -48,6 +48,8 @@ public class Seat {
     public void purchaseSeat() {
         this.purchased = true;
     }
+
+    public void resetPurchaseValue() {this.purchased= false;}
 }
 
 
