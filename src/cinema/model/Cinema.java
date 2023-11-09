@@ -25,6 +25,7 @@ public class Cinema {
         this.seats = getSeats();
         this.tickets = new ArrayList<>();
     }
+
     public List<Seat> getSeats() {
         List<Seat> output = new ArrayList<>();
         Stream.of(seatMap).forEach(e -> {
@@ -63,12 +64,12 @@ public class Cinema {
     public void refundTicket(Ticket ticket, String uuid) {
         int row = ticket.getTicket().getRow();
         int col = ticket.getTicket().getColumn();
-        seatMap[row -1 ][col -1] = new Seat(row, col);
+        seatMap[row - 1][col - 1] = new Seat(row, col);
         deleteTicket(uuid);
         ticket.clearToken();
     }
 
-    private void deleteTicket (String uuid) {
+    private void deleteTicket(String uuid) {
         int indexOf = IntStream.range(0, tickets.size())
                 .filter(i -> uuid.equals(tickets.get(i).getToken()))
                 .findFirst()

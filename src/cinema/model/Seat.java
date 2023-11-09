@@ -49,7 +49,9 @@ public class Seat {
         this.purchased = true;
     }
 
-    public void resetPurchaseValue() {this.purchased= false;}
+    public void resetPurchaseValue() {
+        this.purchased = false;
+    }
 }
 
 
