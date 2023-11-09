@@ -5,14 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@JsonIgnoreProperties(value = {"seatMap"})
+@JsonIgnoreProperties(value = {"seatMap", "tickets"})
 public class Cinema {
     private int rows;
     private int columns;
     private List<Seat> seats;
     private Seat[][] seatMap;
+    private List<Ticket> tickets;
+
 
     public Cinema(int rows, int columns) {
         seatMap = new Seat[rows][columns];
@@ -20,7 +23,9 @@ public class Cinema {
         this.rows = rows;
         this.columns = columns;
         this.seats = getSeats();
+        this.tickets = new ArrayList<>();
     }
+
     public List<Seat> getSeats() {
         List<Seat> output = new ArrayList<>();
         Stream.of(seatMap).forEach(e -> {
@@ -42,6 +47,38 @@ public class Cinema {
         return columns;
     }
 
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public Ticket addTicket(Seat seat) {
+        Ticket ticket = new Ticket(seat);
+        tickets.add(ticket);
+        return ticket;
+    }
+
+    public Ticket getTicket(String uuid) {
+        return tickets.stream().filter(ticket -> uuid.equals(ticket.getToken())).findFirst().orElse(null);
+    }
+
+    public void refundTicket(Ticket ticket, String uuid) {
+        int row = ticket.getTicket().getRow();
+        int col = ticket.getTicket().getColumn();
+        seatMap[row - 1][col - 1] = new Seat(row, col);
+        deleteTicket(uuid);
+        ticket.clearToken();
+    }
+
+    private void deleteTicket(String uuid) {
+        int indexOf = IntStream.range(0, tickets.size())
+                .filter(i -> uuid.equals(tickets.get(i).getToken()))
+                .findFirst()
+                .orElse(-1);
+
+
+        tickets.remove(indexOf);
+    }
+
     private void createSeatingChart(int rows, int columns) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -50,5 +87,6 @@ public class Cinema {
             }
         }
     }
+
 
 }
