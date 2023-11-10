@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@JsonIgnoreProperties(value = {"seatMap", "tickets"})
+@JsonIgnoreProperties(value = {"seatMap", "tickets", "stats"})
 public class Cinema {
     private int rows;
     private int columns;

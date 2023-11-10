@@ -1,11 +1,12 @@
 package cinema.rest.controller;
 
 import cinema.exception.GeneralErrorException;
+import cinema.exception.UnauthorizedAccessException;
 import cinema.model.Cinema;
 import cinema.model.Seat;
+import cinema.model.Statistics;
 import cinema.model.Ticket;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -57,12 +58,22 @@ public class CinemaController {
 
     }
 
-    @ExceptionHandler(GeneralErrorException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map> handleSeatSelectionException(GeneralErrorException e) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
+    @GetMapping("/stats")
+    public Statistics getStats(@RequestParam Map<String, String> payload) throws UnauthorizedAccessException {
+        String password = "";
+        try {
+            password = payload.get("password");
+        } catch (NullPointerException e) {
+            throw new UnauthorizedAccessException();
+        } catch (HttpMessageNotReadableException e) {
+            throw new HttpMessageNotReadableException(e.getMessage());
+        }
+
+        if (password == null || !password.equals("super_secret")) {
+            throw new UnauthorizedAccessException();
+        }
+
+        return cinema.getStats();
     }
 
     private boolean areRowAndColValid(int row, int col) {

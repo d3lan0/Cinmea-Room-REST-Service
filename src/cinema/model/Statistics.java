@@ -1,7 +1,12 @@
 package cinema.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
+@JsonIgnoreProperties(value = {"tickets"})
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class Statistics {
     private int income;
     private int available;
@@ -18,7 +23,23 @@ public class Statistics {
 
     }
 
+    public int getIncome() {
+        return income;
+    }
+
+    public int getAvailable() {
+        return available;
+    }
+
+    public int getPurchased() {
+        return purchased;
+    }
+
     public void setIncome() {
+        if(tickets.isEmpty()) {
+            this.income = 0;
+        }
+
         this.income = tickets.stream()
                 .mapToInt(e -> e.getTicket()
                         .getPrice())
@@ -26,11 +47,11 @@ public class Statistics {
     }
 
     private void setAvailable(int size) {
-        this.available = size - tickets.size();
+        this.available = tickets.isEmpty() ? size : size - tickets.size();
     }
 
     private void setPurchased() {
-        this.purchased = this.tickets.size();
+        this.purchased = tickets.isEmpty() ? 0 :this.tickets.size();
     }
 
     public List<Ticket> getTickets() {
