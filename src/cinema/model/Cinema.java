@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@JsonIgnoreProperties(value = {"seatMap", "tickets"})
+@JsonIgnoreProperties(value = {"seatMap", "tickets", "stats"})
 public class Cinema {
     private int rows;
     private int columns;
     private List<Seat> seats;
     private Seat[][] seatMap;
     private List<Ticket> tickets;
+    private Statistics stats;
 
 
     public Cinema(int rows, int columns) {
@@ -24,6 +25,8 @@ public class Cinema {
         this.columns = columns;
         this.seats = getSeats();
         this.tickets = new ArrayList<>();
+        setStats();
+
     }
 
     public List<Seat> getSeats() {
@@ -54,6 +57,7 @@ public class Cinema {
     public Ticket addTicket(Seat seat) {
         Ticket ticket = new Ticket(seat);
         tickets.add(ticket);
+        setStats();
         return ticket;
     }
 
@@ -67,6 +71,15 @@ public class Cinema {
         seatMap[row - 1][col - 1] = new Seat(row, col);
         deleteTicket(uuid);
         ticket.clearToken();
+        stats.updateStats(getTickets(), getSeats().size());
+    }
+
+    public Statistics getStats() {
+        return stats;
+    }
+
+    private void setStats() {
+        this.stats = new Statistics(tickets, seats.size());
     }
 
     private void deleteTicket(String uuid) {
